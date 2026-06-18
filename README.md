@@ -1,11 +1,11 @@
-# AI Landscape Designer
+# Yardvision
 
 > Upload a photo of your yard. Pick a style. Get back an AI-redesigned landscape — house left untouched.
 
 A full-stack web app that turns a single photo of an unloved yard into a portfolio-quality landscape redesign across five distinct styles (Modern, Japanese Zen, Tropical, Mediterranean, Xeriscape / Desert). Built as a personal project to explore image-to-image generative AI in a real product context — including the unglamorous parts: API cost control, abuse prevention, and prompt engineering that survives contact with real users.
 
 <!-- TODO: replace with a real screenshot once deployed -->
-<!-- ![AI Landscape Designer screenshot](docs/screenshot.png) -->
+<!-- ![Yardvision screenshot](docs/screenshot.png) -->
 
 ## Live demo
 
@@ -54,8 +54,8 @@ Rate limiting auto-disables in development (`NODE_ENV !== "production"`) so loca
 You'll need Node 20+ and a free fal.ai account.
 
 ```bash
-git clone <this-repo>
-cd ai-landscape-designer
+git clone https://github.com/niveditapatil/yardvision.git
+cd yardvision
 npm install
 cp .env.example .env.local
 # Then edit .env.local and paste a FAL_KEY from https://fal.ai/dashboard/keys

@@ -83,7 +83,7 @@ function fileToDataUrl(file: File): Promise<string> {
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
 
-export function AiLandscapeDesigner() {
+export function Yardvision() {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null)
   const [selectedStyle, setSelectedStyle] = useState<string>(STYLES[0].id)
@@ -195,7 +195,7 @@ export function AiLandscapeDesigner() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100 p-4 md:p-8">
       <header className="max-w-5xl mx-auto text-center mb-10">
         <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
-          AI Landscape Designer
+          Yardvision
         </h1>
         <p className="text-xl text-gray-300">
           Upload a photo of your yard and see it reimagined in seconds.

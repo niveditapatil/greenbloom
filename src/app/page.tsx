@@ -1,5 +1,5 @@
-import { AiLandscapeDesigner } from "@/components/ai-landscape-designer"
+import { Yardvision } from "@/components/yardvision"
 
 export default function Home() {
-  return <AiLandscapeDesigner />
+  return <Yardvision />
 }
