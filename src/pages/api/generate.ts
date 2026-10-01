@@ -3,12 +3,16 @@ import { fal } from "@fal-ai/client"
 import { ipLimiter, globalLimiter, isRateLimitEnabled } from "@/lib/ratelimit"
 
 // Allow up to 8 MB request body (room for a 5–6 MB image data URL).
+// Extend Vercel's serverless-function timeout to 60s — FLUX.1 Kontext
+// generations typically take 10–20s, and the Hobby-tier default of 10s
+// would kill them mid-request.
 export const config = {
   api: {
     bodyParser: {
       sizeLimit: "8mb",
     },
   },
+  maxDuration: 60,
 }
 
 const FAL_KEY = process.env.FAL_KEY
