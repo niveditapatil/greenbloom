@@ -4,13 +4,12 @@
 
 A full-stack web app that turns a single photo of an unloved yard into a portfolio-quality landscape redesign across five distinct styles (Modern, Japanese Zen, Tropical, Mediterranean, Xeriscape / Desert). Built as a personal project to explore image-to-image generative AI in a real product context — including the unglamorous parts: API cost control, abuse prevention, and prompt engineering that survives contact with real users.
 
-<!-- TODO: replace with a real screenshot once deployed -->
-<!-- ![Yardvision screenshot](docs/screenshot.png) -->
+<!-- TODO: add a before/after screenshot. Save as docs/before-after.png and uncomment the line below. -->
+<!-- ![Yardvision before-and-after screenshot](docs/before-after.png) -->
 
 ## Live demo
 
-<!-- TODO: paste Vercel URL after deploy -->
-Coming soon.
+**Try it:** <https://nivedita-yardvision.vercel.app>
 
 ## What it does
 
