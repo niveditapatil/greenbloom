@@ -53,8 +53,8 @@ Rate limiting auto-disables in development (`NODE_ENV !== "production"`) so loca
 You'll need Node 20+ and a free fal.ai account.
 
 ```bash
-git clone https://github.com/niveditapatil/yardvision.git
-cd yardvision
+git clone https://github.com/niveditapatil/greenbloom.git
+cd greenbloom
 npm install
 cp .env.example .env.local
 # Then edit .env.local and paste a FAL_KEY from https://fal.ai/dashboard/keys
