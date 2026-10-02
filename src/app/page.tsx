@@ -1,5 +1,5 @@
-import { Yardvision } from "@/components/yardvision"
+import { Greenbloom } from "@/components/greenbloom"
 
 export default function Home() {
-  return <Yardvision />
+  return <Greenbloom />
 }

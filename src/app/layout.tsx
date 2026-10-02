@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Yardvision — AI landscape redesign from a photo",
+  title: "Greenbloom — AI landscape redesign from a photo",
   description:
     "Upload a photo of your yard and get back an AI-redesigned landscape in five distinct styles.",
 };
