@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Github, Linkedin, Mail } from "lucide-react"
+import { Github, Linkedin } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About · Greenbloom",
@@ -114,14 +114,7 @@ export default function AboutUsPage() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:border-emerald-500 hover:bg-gray-800 text-gray-300 hover:text-white text-sm font-medium transition-colors"
         >
           <Linkedin className="h-4 w-4" />
-          LinkedIn
-        </a>
-        <a
-          href="mailto:nivpatil@gmail.com"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:border-emerald-500 hover:bg-gray-800 text-gray-300 hover:text-white text-sm font-medium transition-colors"
-        >
-          <Mail className="h-4 w-4" />
-          Email
+          Connect on LinkedIn
         </a>
       </div>
     </main>
