@@ -22,6 +22,7 @@ import { FooterSection } from "@/components/footer-section"
 import { GallerySection } from "@/components/gallery-section"
 import { HeroSection } from "@/components/hero-section"
 import { HowItWorksSection } from "@/components/how-it-works-section"
+import { NavBar } from "@/components/nav-bar"
 import { RoadmapSection } from "@/components/roadmap-section"
 
 /* ------------------------------------------------------------------ */
@@ -244,7 +245,12 @@ export function Greenbloom() {
   const currentStyle = STYLES.find((s) => s.id === selectedStyle)!
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
+    <div id="top" className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
+      {/* ---------------------------------------------------- */}
+      {/*  Sticky top nav                                        */}
+      {/* ---------------------------------------------------- */}
+      <NavBar />
+
       {/* ---------------------------------------------------- */}
       {/*  Marketing hero                                        */}
       {/* ---------------------------------------------------- */}

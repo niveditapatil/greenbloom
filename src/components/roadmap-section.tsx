@@ -1,32 +1,32 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Lock, CreditCard, Users, MapPinned } from "lucide-react"
+import { Lock, Receipt, Users, MapPinned } from "lucide-react"
 
 const ROADMAP_ITEMS = [
   {
-    icon: Lock,
-    title: "User accounts",
+    icon: Receipt,
+    title: "Rebate matching",
     description:
-      "Save your designs to a personal gallery, share with others, and pick up where you left off. Planned with NextAuth + Google sign-in.",
-  },
-  {
-    icon: CreditCard,
-    title: "Payment for HD renders",
-    description:
-      "Pay a small fee to unlock high-resolution renders and bulk variations. Stripe-based, with transparent per-render pricing.",
+      "Enter your zip code and Greenbloom tells you which local water-conservation rebates your design qualifies for — and generates the paperwork ready to submit. Thousands of dollars for most xeriscape conversions.",
   },
   {
     icon: Users,
     title: "Contractor marketplace",
     description:
-      "Connect with vetted local landscapers who can quote and build the design. Planned after user-account launch.",
+      "Connect with vetted local landscapers who can both build the design and sign off on the rebate documentation — removing the regulatory friction that stops most homeowners from claiming.",
   },
   {
     icon: MapPinned,
-    title: "Regional plant suggestions",
+    title: "Regional plant palettes",
     description:
-      "Use the user's location to suggest plants that actually thrive in their climate zone. Integrates with USDA / OpenEPI data.",
+      "Filter plant choices to species that actually survive in your USDA zone and comply with your local rebate program's approved-plant list. No more generic suggestions.",
+  },
+  {
+    icon: Lock,
+    title: "User accounts",
+    description:
+      "Save your designs to a personal gallery, share with others, revisit redesigns across sessions. Planned with NextAuth + Google sign-in.",
   },
 ]
 
@@ -38,7 +38,9 @@ export function RoadmapSection() {
           <Sparkle /> What&apos;s next
         </CardTitle>
         <p className="text-sm text-gray-400 mt-1">
-          Features planned for the next iteration of this portfolio project.
+          Where Greenbloom is headed next — the pieces that turn an AI design
+          tool into a full path from &ldquo;I want to redesign my yard&rdquo; to
+          &ldquo;I got my rebate check and hired a contractor.&rdquo;
         </p>
       </CardHeader>
       <CardContent>

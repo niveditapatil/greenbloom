@@ -66,7 +66,7 @@ export function GallerySection() {
   const active = PAIRS.find((p) => p.id === activeId) ?? PAIRS[0]
 
   return (
-    <section className="max-w-5xl mx-auto mt-16 mb-12">
+    <section id="gallery" className="max-w-5xl mx-auto mt-16 mb-12 px-4 scroll-mt-20">
       <div className="text-center mb-10">
         <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600 mb-3">
           See it in action
