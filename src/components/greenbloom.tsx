@@ -66,15 +66,59 @@ const STYLES: Style[] = [
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-const MAX_FILE_SIZE_MB = 5
+// Users may drag in anything from a phone photo to an Unsplash original.
+// We accept up to 20 MB raw and auto-resize client-side so the payload we
+// send to /api/generate always fits well under Vercel's ~4.5 MB body cap.
+const MAX_FILE_SIZE_MB = 20
 
-function fileToDataUrl(file: File): Promise<string> {
+// Target max dimensions and quality for the resized output. 1920px wide
+// is more than Kontext needs for a quality redesign, and q=0.85 JPEG keeps
+// the base64 payload comfortably under 2 MB in practice.
+const RESIZE_MAX_DIMENSION = 1920
+const RESIZE_JPEG_QUALITY = 0.85
+
+function loadImage(file: File): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(String(reader.result))
-    reader.onerror = () => reject(new Error("Failed to read file"))
-    reader.readAsDataURL(file)
+    const url = URL.createObjectURL(file)
+    const img = new Image()
+    img.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve(img)
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error("Failed to decode image"))
+    }
+    img.src = url
   })
+}
+
+/**
+ * Resize a user-uploaded image to fit inside RESIZE_MAX_DIMENSION on its
+ * longest side (preserving aspect ratio) and re-encode as JPEG. Returns a
+ * base64 data URL ready to POST to /api/generate.
+ *
+ * If the image is already smaller than the target, the original is still
+ * re-encoded as JPEG — this strips EXIF (incl. GPS) and normalizes format
+ * so the server-side guard that insists on "data:image/" always sees JPEG.
+ */
+async function resizeImageToDataUrl(file: File): Promise<string> {
+  const img = await loadImage(file)
+  const { width: w, height: h } = img
+
+  const longest = Math.max(w, h)
+  const scale = longest > RESIZE_MAX_DIMENSION ? RESIZE_MAX_DIMENSION / longest : 1
+  const targetW = Math.round(w * scale)
+  const targetH = Math.round(h * scale)
+
+  const canvas = document.createElement("canvas")
+  canvas.width = targetW
+  canvas.height = targetH
+  const ctx = canvas.getContext("2d")
+  if (!ctx) throw new Error("Canvas not supported in this browser")
+  ctx.drawImage(img, 0, 0, targetW, targetH)
+
+  return canvas.toDataURL("image/jpeg", RESIZE_JPEG_QUALITY)
 }
 
 /* ------------------------------------------------------------------ */
@@ -105,7 +149,9 @@ export function Greenbloom() {
       return
     }
     try {
-      const dataUrl = await fileToDataUrl(file)
+      // Auto-resize so even multi-MB phone / Unsplash photos become a
+      // compact JPEG data URL before we send it to the server.
+      const dataUrl = await resizeImageToDataUrl(file)
       setImageDataUrl(dataUrl)
     } catch {
       setError("Couldn't read that file. Try a different image.")
