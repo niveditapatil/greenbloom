@@ -2,7 +2,7 @@
 
 > Upload a photo of your yard. Pick a style. Get back an AI-redesigned landscape — house left untouched.
 
-A full-stack web app that turns a single photo of an unloved yard into a portfolio-quality landscape redesign across five distinct styles (Modern, Japanese Zen, Tropical, Mediterranean, Xeriscape / Desert). Built as a personal project to explore image-to-image generative AI in a real product context — including the unglamorous parts: API cost control, abuse prevention, and prompt engineering that survives contact with real users.
+Greenbloom is building the shortest path from a homeowner's yard photo to a built, rebate-funded landscape. Today it handles the design piece — AI image-to-image generation across five curated styles. Next: rebate-eligible plant lists filtered to local programs, documentation generation ready to submit, and a marketplace of vetted contractors who can both build the design and sign off on the paperwork.
 
 <!-- TODO: add a before/after screenshot. Save as docs/before-after.png and uncomment the line below. -->
 <!-- ![Greenbloom before-and-after screenshot](docs/before-after.png) -->
@@ -13,11 +13,11 @@ A full-stack web app that turns a single photo of an unloved yard into a portfol
 
 ## What it does
 
-1. **Upload** a photo of your front or back yard (JPG / PNG / WebP, up to 5 MB).
-2. **Pick a style** from five landscape archetypes and optionally add a free-text nudge (e.g., "include a fire pit").
+1. **Upload** a photo of your front or back yard. Any phone photo works — the client auto-resizes to 1920 px wide before sending.
+2. **Pick a style** from five landscape archetypes (Modern, Japanese Zen, Tropical, Mediterranean, Xeriscape / Desert) and optionally add a free-text nudge (e.g., "include a fire pit").
 3. **Get a redesign** rendered by FLUX.1 Kontext in roughly 15 seconds — the house, driveway, and property lines stay pixel-faithful to your photo; only the plants, hardscape, and landscape lighting change.
 
-You can keep clicking "Try another style" to flip through redesigns on the same photo without re-uploading.
+Keep clicking "Try another style" to flip through redesigns on the same photo without re-uploading.
 
 ## Tech stack
 
@@ -34,7 +34,7 @@ You can keep clicking "Try another style" to flip through redesigns on the same 
 
 ## Architecture highlights
 
-**Server-side API key isolation.** The fal.ai key never touches the browser. The original prototype exposed it as `NEXT_PUBLIC_FAL_KEY`; that was the first thing fixed when reviving the project. All generation calls go through `/api/generate`, which holds the credential and proxies fal.
+**Server-side API key isolation.** The fal.ai key never touches the browser. All generation calls go through `/api/generate`, which holds the credential and proxies fal.
 
 **Layered abuse prevention.** A public demo with a paid AI backend is an open invoice waiting to be cashed. Three layers cap exposure:
 
@@ -44,9 +44,13 @@ You can keep clicking "Try another style" to flip through redesigns on the same 
 
 Rate limiting auto-disables in development (`NODE_ENV !== "production"`) so local iteration isn't throttled.
 
-**Prompt engineering for image-to-image fidelity.** FLUX.1 Kontext is powerful but happily redesigns the house along with the landscape if you ask it for "dramatic" changes. Each style prompt is structured as a **sandwich**: a strong architectural preservation clause (listing windows, siding, paint, roof, trim, doors, etc.) wraps both the opening *and* closing of the prompt, so the model gets the "don't touch the house" signal in both high-weight positions. The creative hero description — concrete species, lighting, and a photographic quality cue — lives in the middle and end.
+**Prompt engineering for image-to-image fidelity.** FLUX.1 Kontext is powerful but happily redesigns the house along with the landscape at high guidance. Each style prompt is structured as a **sandwich**: a strong architectural preservation clause (listing windows, siding, paint, roof, trim, doors, etc.) wraps both the opening *and* closing of the prompt, so the model gets the "don't touch the house" signal in both high-weight positions. The creative hero description — concrete species and materials — lives in the middle.
 
-**Honest UX over knobs.** An early version exposed a "How dramatic?" guidance slider. Testing showed users always pushed it to max, so the knob was removed and the backend now hardcodes guidance to the maximum value, leaning on prompt structure (not parameters) to keep the house in place.
+**Client-side image resize.** The browser decodes the uploaded file into a canvas, scales it so the longest side is ≤ 1920 px, and re-encodes as JPEG at quality 0.85 before sending. This handles multi-MB phone photos cleanly, keeps the eventual payload well under Vercel's 4.5 MB serverless body cap, and strips EXIF (including GPS) as a privacy side-benefit.
+
+**Honest UX over knobs.** An early version exposed a "How dramatic?" guidance slider. Testing showed users always pushed it to max, so the knob was removed and the backend now hardcodes guidance to the maximum, leaning on prompt structure (not parameters) to keep the house in place.
+
+**Match-input lighting.** Earlier outputs defaulted to golden-hour cinematic lighting, which looked great in isolation but broke tonal consistency with midday upload photos. Prompts now explicitly ask the model to match the input photo's lighting, exposure, and time of day — cleaner before/after comparisons at the cost of some drama.
 
 ## Local development
 
@@ -63,7 +67,7 @@ npm run dev
 
 Open <http://localhost:3000>.
 
-In dev, Upstash and Turnstile are optional — leave their env vars blank and the app skips both. For production they're recommended (see `.env.example`).
+In dev, Upstash and Turnstile are optional — leave their env vars blank and the app skips both. For production both are recommended (see `.env.example`).
 
 ## Deploying to Vercel
 
@@ -76,17 +80,11 @@ In dev, Upstash and Turnstile are optional — leave their env vars blank and th
 
 The current UI surfaces these as "coming soon" cards on the landing page:
 
-- **User accounts** for saving and revisiting designs
-- **HD render payments** for higher-resolution outputs
-- **Contractor marketplace** to connect with local landscapers
-- **Regional plant suggestions** that adapt species lists to a user's climate zone
-
-## Project history
-
-This repo started as a Cursor-built prototype in October 2024 and sat on localhost for over a year. It was revived and rebuilt in 2026 with focus on: production hardening, prompt-engineering quality, a streamlined three-step user flow (down from the original eight), and a public deployment story.
-
-The `src/pages/api/get-signed-url.ts` route is archived from the original Theme Portfolio gallery (S3 + STS AssumeRole) and is no longer referenced by the UI; left in place in case the gallery is restored later.
+- **Rebate matching** — enter your zip code, get told which local water-conservation rebates your design qualifies for, and generate the paperwork ready to submit.
+- **Contractor marketplace** — connect with vetted local landscapers who can both build the design and sign off on rebate documentation.
+- **Regional plant palettes** — filter plant choices to species that survive in your USDA zone and comply with your local rebate program's approved list.
+- **User accounts** — save designs to a personal gallery, share with others, revisit across sessions.
 
 ## License
 
-MIT — see [LICENSE](LICENSE) if you'd like to reuse this for your own portfolio project.
+MIT — see [LICENSE](LICENSE).
