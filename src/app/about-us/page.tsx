@@ -108,7 +108,7 @@ export default function AboutUsPage() {
           View on GitHub
         </a>
         <a
-          href="https://www.linkedin.com/in/niveditapatil/"
+          href="https://www.linkedin.com/in/nivedita-patil"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-700 hover:border-emerald-500 hover:bg-gray-800 text-gray-300 hover:text-white text-sm font-medium transition-colors"
