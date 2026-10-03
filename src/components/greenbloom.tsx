@@ -16,6 +16,7 @@ import {
   AlertTriangle,
   Download,
 } from "lucide-react"
+import { GallerySection } from "@/components/gallery-section"
 import { RoadmapSection } from "@/components/roadmap-section"
 
 /* ------------------------------------------------------------------ */
@@ -535,6 +536,11 @@ export function Greenbloom() {
             </AnimatePresence>
           </CardContent>
         </Card>
+
+        {/* ---------------------------------------------------- */}
+        {/*  Gallery of real before / after transformations       */}
+        {/* ---------------------------------------------------- */}
+        <GallerySection />
 
         {/* ---------------------------------------------------- */}
         {/*  Roadmap section                                      */}
