@@ -21,11 +21,11 @@ type Pair = {
 
 const PAIRS: Pair[] = [
   {
-    id: "yard1-zen",
+    id: "yard1-tropical",
     before: "/gallery/yard1.jpg",
-    after: "/gallery/yard1-zen.jpg",
-    style: "Japanese Zen",
-    styleColor: "from-emerald-500 to-teal-700",
+    after: "/gallery/yard1-tropical.jpg",
+    style: "Tropical",
+    styleColor: "from-lime-500 to-emerald-700",
   },
   {
     id: "yard2-mediterranean",
@@ -49,11 +49,11 @@ const PAIRS: Pair[] = [
     styleColor: "from-orange-500 to-red-700",
   },
   {
-    id: "yard5-tropical",
+    id: "yard5-zen",
     before: "/gallery/yard5.jpg",
-    after: "/gallery/yard5-tropical.jpg",
-    style: "Tropical",
-    styleColor: "from-lime-500 to-emerald-700",
+    after: "/gallery/yard5-zen.jpg",
+    style: "Japanese Zen",
+    styleColor: "from-emerald-500 to-teal-700",
   },
 ]
 
