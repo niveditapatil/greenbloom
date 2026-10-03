@@ -23,6 +23,9 @@ export function FooterSection() {
         </div>
 
         <div className="flex items-center gap-5">
+          <a href="/about-us" className="hover:text-emerald-400 transition-colors">
+            About
+          </a>
           <a
             href="https://github.com/niveditapatil/greenbloom"
             target="_blank"

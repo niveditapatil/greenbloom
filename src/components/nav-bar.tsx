@@ -4,10 +4,11 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 
 const LINKS = [
-  { href: "#wizard", label: "Try it" },
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#gallery", label: "Gallery" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#wizard", label: "Try it" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#gallery", label: "Gallery" },
+  { href: "/#faq", label: "FAQ" },
+  { href: "/about-us", label: "About" },
 ]
 
 export function NavBar() {
@@ -18,7 +19,7 @@ export function NavBar() {
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand */}
         <a
-          href="#top"
+          href="/"
           className="flex items-center gap-2 text-white font-bold text-lg tracking-tight"
         >
           <span className="inline-block h-6 w-6 rounded-md bg-gradient-to-br from-emerald-400 to-teal-600" />
@@ -40,7 +41,7 @@ export function NavBar() {
 
         {/* Desktop CTA */}
         <a
-          href="#wizard"
+          href="/#wizard"
           className="hidden md:inline-flex items-center px-4 py-2 rounded-md bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-sm font-medium transition-all"
         >
           Try it free
@@ -72,7 +73,7 @@ export function NavBar() {
               </a>
             ))}
             <a
-              href="#wizard"
+              href="/#wizard"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-md bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium"
             >

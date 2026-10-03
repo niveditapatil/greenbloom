@@ -16,13 +16,10 @@ import {
   AlertTriangle,
   Download,
 } from "lucide-react"
-import { AboutSection } from "@/components/about-section"
 import { FaqSection } from "@/components/faq-section"
-import { FooterSection } from "@/components/footer-section"
 import { GallerySection } from "@/components/gallery-section"
 import { HeroSection } from "@/components/hero-section"
 import { HowItWorksSection } from "@/components/how-it-works-section"
-import { NavBar } from "@/components/nav-bar"
 import { RoadmapSection } from "@/components/roadmap-section"
 
 /* ------------------------------------------------------------------ */
@@ -245,12 +242,7 @@ export function Greenbloom() {
   const currentStyle = STYLES.find((s) => s.id === selectedStyle)!
 
   return (
-    <div id="top" className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
-      {/* ---------------------------------------------------- */}
-      {/*  Sticky top nav                                        */}
-      {/* ---------------------------------------------------- */}
-      <NavBar />
-
+    <div id="top">
       {/* ---------------------------------------------------- */}
       {/*  Marketing hero                                        */}
       {/* ---------------------------------------------------- */}
@@ -564,19 +556,9 @@ export function Greenbloom() {
       {/* ---------------------------------------------------- */}
       {/*  Roadmap of coming-soon features                       */}
       {/* ---------------------------------------------------- */}
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-4xl mx-auto px-4 pb-16">
         <RoadmapSection />
       </div>
-
-      {/* ---------------------------------------------------- */}
-      {/*  About the project / maker                             */}
-      {/* ---------------------------------------------------- */}
-      <AboutSection />
-
-      {/* ---------------------------------------------------- */}
-      {/*  Footer                                                */}
-      {/* ---------------------------------------------------- */}
-      <FooterSection />
     </div>
   )
 }
