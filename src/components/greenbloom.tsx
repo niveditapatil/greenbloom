@@ -16,7 +16,12 @@ import {
   AlertTriangle,
   Download,
 } from "lucide-react"
+import { AboutSection } from "@/components/about-section"
+import { FaqSection } from "@/components/faq-section"
+import { FooterSection } from "@/components/footer-section"
 import { GallerySection } from "@/components/gallery-section"
+import { HeroSection } from "@/components/hero-section"
+import { HowItWorksSection } from "@/components/how-it-works-section"
 import { RoadmapSection } from "@/components/roadmap-section"
 
 /* ------------------------------------------------------------------ */
@@ -239,21 +244,17 @@ export function Greenbloom() {
   const currentStyle = STYLES.find((s) => s.id === selectedStyle)!
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100 p-4 md:p-8">
-      <header className="max-w-5xl mx-auto text-center mb-10">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-600">
-          Greenbloom
-        </h1>
-        <p className="text-xl text-gray-300">
-          Upload a photo of your yard and see it reimagined in seconds.
-        </p>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-gray-100">
+      {/* ---------------------------------------------------- */}
+      {/*  Marketing hero                                        */}
+      {/* ---------------------------------------------------- */}
+      <HeroSection />
 
-      <main className="max-w-4xl mx-auto space-y-12">
+      <main className="max-w-4xl mx-auto space-y-12 px-4">
         {/* ---------------------------------------------------- */}
-        {/*  Hero card                                            */}
+        {/*  Live wizard — the actual product                      */}
         {/* ---------------------------------------------------- */}
-        <Card className="bg-gray-800 shadow-xl border-0 overflow-hidden">
+        <Card id="wizard" className="bg-gray-800 shadow-xl border-0 overflow-hidden scroll-mt-8">
           <CardHeader className="bg-gradient-to-r from-emerald-600 to-teal-700 text-white">
             <CardTitle className="text-2xl text-center flex items-center justify-center">
               <Sparkles className="mr-2" />
@@ -537,23 +538,39 @@ export function Greenbloom() {
           </CardContent>
         </Card>
 
-        {/* ---------------------------------------------------- */}
-        {/*  Gallery of real before / after transformations       */}
-        {/* ---------------------------------------------------- */}
-        <GallerySection />
-
-        {/* ---------------------------------------------------- */}
-        {/*  Roadmap section                                      */}
-        {/* ---------------------------------------------------- */}
-        <RoadmapSection />
-
-        {/* ---------------------------------------------------- */}
-        {/*  Footer                                                */}
-        {/* ---------------------------------------------------- */}
-        <footer className="text-center text-sm text-gray-500 pt-8 pb-4">
-          Built with Next.js · fal.ai (FLUX.1 Kontext pro) · Upstash · Vercel
-        </footer>
       </main>
+
+      {/* ---------------------------------------------------- */}
+      {/*  How it works — 3-step diagram                         */}
+      {/* ---------------------------------------------------- */}
+      <HowItWorksSection />
+
+      {/* ---------------------------------------------------- */}
+      {/*  Gallery of real before / after transformations       */}
+      {/* ---------------------------------------------------- */}
+      <GallerySection />
+
+      {/* ---------------------------------------------------- */}
+      {/*  FAQ                                                   */}
+      {/* ---------------------------------------------------- */}
+      <FaqSection />
+
+      {/* ---------------------------------------------------- */}
+      {/*  Roadmap of coming-soon features                       */}
+      {/* ---------------------------------------------------- */}
+      <div className="max-w-4xl mx-auto px-4">
+        <RoadmapSection />
+      </div>
+
+      {/* ---------------------------------------------------- */}
+      {/*  About the project / maker                             */}
+      {/* ---------------------------------------------------- */}
+      <AboutSection />
+
+      {/* ---------------------------------------------------- */}
+      {/*  Footer                                                */}
+      {/* ---------------------------------------------------- */}
+      <FooterSection />
     </div>
   )
 }
