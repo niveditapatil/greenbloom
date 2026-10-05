@@ -135,6 +135,9 @@ export function Greenbloom() {
   const [step, setStep] = useState<1 | 2 | 3>(1)
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null)
   const [selectedStyle, setSelectedStyle] = useState<string>(STYLES[0].id)
+  const [selectedModel, setSelectedModel] = useState<"flux2" | "nano-banana">(
+    "flux2",
+  )
   const [prompt, setPrompt] = useState("")
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -196,6 +199,7 @@ export function Greenbloom() {
         body: JSON.stringify({
           imageDataUrl,
           style: selectedStyle,
+          model: selectedModel,
           prompt,
           turnstileToken,
         }),
@@ -338,6 +342,36 @@ export function Greenbloom() {
                   transition={{ duration: 0.3 }}
                   className="space-y-6"
                 >
+                  {/* Model picker — temporary for comparison testing.
+                      Remove once a winner is chosen. */}
+                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 p-3">
+                    <Label className="text-amber-300 text-xs uppercase tracking-wider mb-2 block">
+                      Testing — pick a model
+                    </Label>
+                    <div className="flex gap-2">
+                      {([
+                        { id: "flux2", label: "FLUX.2 Pro" },
+                        { id: "nano-banana", label: "Nano Banana 2" },
+                      ] as const).map((m) => {
+                        const isSelected = selectedModel === m.id
+                        return (
+                          <button
+                            key={m.id}
+                            type="button"
+                            onClick={() => setSelectedModel(m.id)}
+                            className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium transition ${
+                              isSelected
+                                ? "border-amber-400 bg-amber-500/20 text-amber-100"
+                                : "border-gray-700 bg-gray-800/60 text-gray-300 hover:border-gray-500"
+                            }`}
+                          >
+                            {m.label}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+
                   <div>
                     <Label className="text-gray-300 mb-3 block">
                       Choose a style

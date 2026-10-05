@@ -28,10 +28,21 @@ type GenerateBody = {
   style?: string
   prompt?: string
   turnstileToken?: string
+  model?: string
 }
 
 type FalImage = { url: string }
-type FalKontextResult = { images?: FalImage[] }
+type FalEditResult = { images?: FalImage[] }
+
+// Available image-edit models. Both are on fal.ai; both accept
+// `prompt` + `image_urls` (list of base64 data URLs or hosted URLs) and
+// return `{ images: [{ url }] }`. The user-facing model picker in step 2
+// of the wizard writes to this param.
+const MODEL_ENDPOINTS: Record<string, string> = {
+  flux2: "fal-ai/flux-2-pro/edit",
+  "nano-banana": "fal-ai/nano-banana-2/edit",
+}
+const DEFAULT_MODEL = "flux2"
 
 // Prompt structure ("sandwich" with randomized middle):
 //   1. PRESERVATION_CLAUSE — architectural specifics that must stay pixel-
@@ -204,8 +215,14 @@ export default async function handler(
     })
   }
 
-  const { imageDataUrl, style, prompt, turnstileToken } =
+  const { imageDataUrl, style, prompt, turnstileToken, model } =
     (req.body ?? {}) as GenerateBody
+
+  // Resolve + validate model choice. Default to FLUX.2 when unspecified.
+  const modelName = typeof model === "string" && model in MODEL_ENDPOINTS
+    ? model
+    : DEFAULT_MODEL
+  const endpoint = MODEL_ENDPOINTS[modelName]
 
   // ---- Input validation ----
   if (!imageDataUrl || typeof imageDataUrl !== "string") {
@@ -292,32 +309,37 @@ export default async function handler(
   ]
     .filter(Boolean)
     .join(" ")
-  // Logged (server-only) so we can trace which variant produced which image.
-  console.log(`fal generate: style=${style} variant=${variant.name}`)
+  // Logged (server-only) so we can trace which model + variant produced
+  // which image during the model-comparison testing phase.
+  console.log(
+    `fal generate: model=${modelName} style=${style} variant=${variant.name}`,
+  )
 
-  // Guidance scale is hard-coded to the max (10) — lower values produced
-  // weak, conservative redesigns in testing. The sandwiched preservation
-  // clauses in the sandwich hold the house in place at this setting.
-  const GUIDANCE_SCALE = 10
+  // ---- Dispatch to the chosen fal.ai edit endpoint ----
+  // Both FLUX.2 [pro] Edit and Nano Banana 2 Edit use `image_urls` (list)
+  // and return `images[0].url`. Nano Banana adds `resolution` and
+  // `aspect_ratio`; FLUX.2 uses `image_size`. Everything else is harmonized
+  // here so downstream code is model-agnostic.
+  const input: Record<string, unknown> = {
+    prompt: fullPrompt,
+    image_urls: [imageDataUrl],
+    output_format: "jpeg",
+    num_images: 1,
+  }
+  if (modelName === "nano-banana") {
+    input.resolution = "1K"
+    input.aspect_ratio = "auto"
+    input.safety_tolerance = "4"
+  } else {
+    // FLUX.2 Pro Edit
+    input.image_size = "auto"
+    input.safety_tolerance = "2"
+  }
 
-  // ---- Call fal.ai (FLUX.1 Kontext [pro]) ----
-  // Trialed [max] ($0.08) but the quality lift wasn't worth the 2x cost.
-  // Sticking with [pro] and leaning on tighter prompting to preserve
-  // architecture.
   try {
-    const result = await fal.subscribe("fal-ai/flux-pro/kontext", {
-      input: {
-        prompt: fullPrompt,
-        image_url: imageDataUrl,
-        guidance_scale: GUIDANCE_SCALE,
-        num_images: 1,
-        safety_tolerance: "2",
-        output_format: "jpeg",
-      },
-      logs: false,
-    })
+    const result = await fal.subscribe(endpoint, { input, logs: false })
 
-    const data = result?.data as FalKontextResult | undefined
+    const data = result?.data as FalEditResult | undefined
     const url = data?.images?.[0]?.url
     if (!url) {
       return res
