@@ -87,14 +87,28 @@ export default function AboutUsPage() {
       <h2 className="text-2xl font-bold text-white mb-4 mt-10">
         Who built it
       </h2>
+
+      <div className="flex items-center gap-4 mb-6">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/nivedita.jpg"
+          alt="Nivedita Patil"
+          className="h-16 w-16 rounded-full object-cover border-2 border-emerald-500/40"
+        />
+        <div>
+          <p className="text-white font-semibold">Nivedita Patil</p>
+          <p className="text-sm text-gray-400">
+            Product manager · building Greenbloom
+          </p>
+        </div>
+      </div>
+
       <p className="text-gray-400 leading-relaxed mb-6">
-        Greenbloom is built by{" "}
-        <span className="text-white font-medium">Nivedita Patil</span>, a
-        product manager exploring the intersection of generative AI and
-        everyday homeowner problems. If you&apos;re a contractor interested in
-        the eventual marketplace, a water utility exploring rebate-program
-        partnerships, or a homeowner with feedback on what&apos;s missing, I
-        want to hear from you.
+        Exploring the intersection of generative AI and everyday homeowner
+        problems. If you&apos;re a contractor interested in the eventual
+        marketplace, a water utility exploring rebate-program partnerships, or
+        a homeowner with feedback on what&apos;s missing, I want to hear from
+        you.
       </p>
 
       <div className="flex flex-wrap items-center gap-3">

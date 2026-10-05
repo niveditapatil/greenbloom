@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
+import { Logo } from "@/components/logo"
 
 const LINKS = [
   { href: "/#wizard", label: "Try it" },
@@ -22,7 +23,7 @@ export function NavBar() {
           href="/"
           className="flex items-center gap-2 text-white font-bold text-lg tracking-tight"
         >
-          <span className="inline-block h-6 w-6 rounded-md bg-gradient-to-br from-emerald-400 to-teal-600" />
+          <Logo size={28} />
           Greenbloom
         </a>
 
