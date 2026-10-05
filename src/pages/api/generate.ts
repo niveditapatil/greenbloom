@@ -267,22 +267,27 @@ export default async function handler(
   // instead of converging on the same template.
   const variants = STYLE_VARIANTS[style]
   const variant = variants[Math.floor(Math.random() * variants.length)]
-  // User-provided extras are a priority instruction — slotted RIGHT AFTER
-  // the variant creative so they're read as part of the core brief, and
-  // framed as a requirement that overrides any conflicting default
-  // (e.g., user asks for a water feature even though ANTI_CLICHE elsewhere
-  // discourages decorative water features by default).
-  const userRequirement = userExtra
-    ? `The user has specifically requested the following and this requirement MUST be honored, overriding any conflicting defaults: ${userExtra}. Interpret this request generously — if the user names a category (e.g., "water feature", "seating area", "lighting"), render it as a substantial, well-integrated hero element in the composition (e.g., a cascading natural-stone waterfall or a modern linear reflecting pool for "water feature") — not a small token version (e.g., a pot with water, a bird bath) tucked in a corner.`
+  // User-provided extras are sandwiched: at the TOP of the prompt (first
+  // high-weight position in FLUX attention) and REPEATED at the bottom
+  // (second high-weight position). Explicit anti-substitution language
+  // tells the model "waterfall means a real waterfall, not a bird bath"
+  // because FLUX otherwise defaults to the smallest/safest interpretation.
+  const userReqTop = userExtra
+    ? `CRITICAL REQUIREMENT: The following user-requested element MUST appear as a clearly visible, substantial feature in the final image: "${userExtra}". Treat it as a hero of the composition. Interpret generously and generously-sized — e.g., "water feature" or "waterfall" means a real, substantial cascading stone waterfall or linear reflecting pool, NOT a tiny bird bath, pot of water, decorative urn, or any token small-scale substitute. If the user asked for an object, draw that object at a scale that would read clearly in a photograph.`
+    : ""
+
+  const userReqBottom = userExtra
+    ? `Final check: did you include "${userExtra}" as a clearly visible, substantial, hero-scale element? If it's small, missing, or substituted with a token version, revise now.`
     : ""
 
   const fullPrompt = [
     PRESERVATION_CLAUSE,
+    userReqTop,
     variant.creative,
-    userRequirement,
     ANTI_CLICHE,
     WOW_FACTOR,
     LIGHTING_CLAUSE,
+    userReqBottom,
     CLOSING_PRESERVATION,
   ]
     .filter(Boolean)
