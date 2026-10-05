@@ -40,7 +40,7 @@ export function RoadmapSection() {
         <p className="text-sm text-gray-400 mt-1">
           Where Greenbloom is headed next — the pieces that turn an AI design
           tool into a full path from &ldquo;I want to redesign my yard&rdquo; to
-          &ldquo;I got my rebate check and hired a contractor.&rdquo;
+          a built landscape with the rebate paperwork submitted on your behalf.
         </p>
       </CardHeader>
       <CardContent>
