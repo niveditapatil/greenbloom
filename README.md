@@ -4,8 +4,7 @@
 
 Greenbloom is building the shortest path from a homeowner's yard photo to a built, rebate-funded landscape. Today it handles the design piece — AI image-to-image generation across five curated styles. Next: rebate-eligible plant lists filtered to local programs, documentation generation ready to submit, and a marketplace of vetted contractors who can both build the design and sign off on the paperwork.
 
-<!-- TODO: add a before/after screenshot. Save as docs/before-after.png and uncomment the line below. -->
-<!-- ![Greenbloom before-and-after screenshot](docs/before-after.png) -->
+![Greenbloom before and after — a Tudor-style home with a plain lawn transformed into a lush tropical landscape](docs/before-after.jpg)
 
 ## Live demo
 
