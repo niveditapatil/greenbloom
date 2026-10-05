@@ -33,28 +33,132 @@ type GenerateBody = {
 type FalImage = { url: string }
 type FalKontextResult = { images?: FalImage[] }
 
-// Prompt structure ("sandwich"):
-//   1. STRONG preservation clause FIRST with explicit architectural
-//      specifics (windows, siding, roof, trim, etc.) — FLUX weights the
-//      opening tokens.
-//   2. Transformation directive + vivid, species-specific style
-//      description in the middle — this is the creative core.
-//   3. Preservation RE-ASSERTED at the end — FLUX also weights closing
-//      tokens, and without this the house tends to drift.
-// Each prompt explicitly scopes the edit to "plants, hardscape surfaces,
-// and landscape lighting" so the model doesn't treat the house as fair
-// game just because the middle of the prompt said "Completely redesign".
-const STYLE_PROMPTS: Record<string, string> = {
-  modern:
-    "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change. Completely redesign that landscaping as a high-end contemporary landscape: clean geometric drifts of ornamental grasses (blue fescue, feather reed grass, Mexican feather grass), sculptural mature agaves and large succulents, tightly-clipped evergreen boxwood spheres and yew cubes, and architectural accent trees with smooth bark. Install large-format poured-concrete pavers or smooth limestone slabs as walkways with crisp dark joints, oversized minimalist planters in matte black and weathered concrete, wide bands of black lava rock and pale river pebble as ground cover, and Corten-steel edging. Strong negative space, restrained plant palette, intentional asymmetry, nothing overgrown. Architectural-digest quality, photorealistic, with the lighting, exposure, and time of day matching the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned.",
-  zen:
-    "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change. Completely redesign that landscaping as an authentic Japanese karesansui zen garden. Replace all existing plants and ground cover with a large expanse of finely raked white and pale grey gravel with concentric curved rake patterns flowing around the focal points. Place weathered mossy granite boulders in asymmetric odd-numbered groupings (threes and fives) as 'islands' rising out of the gravel sea. Add undulating mounds of vivid emerald moss, a single sculpted Japanese maple with deep crimson leaves as the hero focal point, a cloud-pruned (niwaki) black pine, a tall bamboo screen along the back edge, a meandering stepping-stone path of dark basalt, a stone lantern (tōrō), and a small tsukubai water basin with a bamboo spout. Tranquil, contemplative, deliberately asymmetric, spiritual. Kyoto temple-garden quality, photorealistic, with the lighting, exposure, and time of day matching the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned.",
-  tropical:
-    "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change. Completely redesign that landscaping as a lush, mature tropical paradise. Replace all existing plants and ground cover with a dense layered jungle canopy featuring multiple mature tall palm trees as the hero feature (queen palms, royal palms, fan palms, and king palms), big-leafed banana plants with broad green fronds, bird-of-paradise with vivid orange and blue flowers, cascading magenta bougainvillea spilling over walls and trellises, towering tree ferns, clusters of red and orange heliconia, giant-leafed philodendron and monstera, elephant-ear alocasia, and brightly-colored yellow-and-red crotons. Wind a curving natural flagstone path through the planting and include a small natural boulder waterfall water feature. Abundant, exotic, deeply layered, wildly saturated color. Maui resort quality, photorealistic, with the lighting, exposure, and time of day matching the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned.",
-  mediterranean:
-    "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change. Completely redesign that landscaping as a sun-drenched Mediterranean villa garden inspired by Tuscany, Provence, and the Greek islands. Replace all existing plants and ground cover with mature silver-foliaged olive trees with gnarled trunks as hero focal points, tall columnar Italian cypress trees framing the view, long aromatic rows of purple lavender and rosemary, cascading bougainvillea in magenta and coral spilling over low stone walls, potted lemon and orange citrus trees in weathered terracotta urns, pink oleander, climbing jasmine and grapevines on a wooden pergola, and low cushions of creeping thyme between dry-laid stone pavers. Add warm-toned decomposed granite or pea-gravel paths, a small trickling stone fountain, terracotta urn planters at focal points, and low dry-stacked limestone walls. Warm, sun-baked, aromatic, relaxed, elegant. Tuscan-villa magazine quality, photorealistic, with the lighting, exposure, and time of day matching the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned.",
-  xeriscape:
-    "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change. Completely redesign that landscaping as a sophisticated Sonoran desert xeriscape garden. Replace all existing plants and ground cover with multiple tall saguaro and organ-pipe cacti as hero sculptural focal points, mature blue agaves and century plants, clusters of golden barrel cactus, spiny ocotillo with crimson flower tips, soaptree yuccas, desert spoon (dasylirion), red-flowering hesperaloe, a single mature palo verde tree with green bark and yellow flowers, and an ironwood tree providing filtered shade. Carpet the ground with rust-colored decomposed granite, warm tan and buff gravel, scattered river-washed boulders, and black lava rock accents. Add a curving flagstone or dry-stacked stone-slab path and steel planters with single specimen cacti. Water-wise, architectural, bold silhouettes against gravel, zero turf. Sedona-resort quality, photorealistic, with the lighting, exposure, and time of day matching the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned.",
+// Prompt structure ("sandwich" with randomized middle):
+//   1. PRESERVATION_CLAUSE — architectural specifics that must stay pixel-
+//      identical. FLUX weights the opening tokens.
+//   2. One randomly-chosen STYLE_VARIANT for the requested style — gives
+//      the model a specific directional brief without being so prescriptive
+//      that every output converges to the same template. Each style has
+//      multiple variants so repeat generations surprise.
+//   3. ANTI_CLICHE — explicit "don't follow the obvious template" guidance.
+//   4. LIGHTING_CLAUSE — match input photo exposure.
+//   5. CLOSING_PRESERVATION — preservation reasserted at the end (also a
+//      high-weight position in FLUX's attention).
+
+const PRESERVATION_CLAUSE =
+  "Keep the house and all built architecture exactly as they are in the input photo. The exterior walls, siding, paint color, windows, window frames and trim, doors, door frames, roof, roof material, gutters, chimneys, porch, railings, and every architectural detail must remain pixel-identical to the input image. Only the ground-level landscaping — plants, lawn, mulch, gravel, walkways, planters, and landscape lighting — may change."
+
+const ANTI_CLICHE =
+  "Design this as a bespoke installation specific to THIS property, not a template. If specific elements were requested above by the user, those are required — include them exactly as asked. Beyond those explicit requests, avoid predictable landscape clichés: symmetric trees framing the entry, straight paths down the center, 'one of everything' plant collections. Compose asymmetrically. Pick a few hero elements and commit to them rather than cramming every stylistic cue in. The arrangement should feel like a creative studio designed it for this exact yard, not applied a style preset."
+
+const WOW_FACTOR =
+  "Make this show-stopping — the kind of yard that makes passers-by slow down for a second look. Push for a single dramatic specimen plant or sculptural focal element as the undeniable hero, strong confident composition, intentional color and texture contrast, high-end material finishes, and generous mature-looking planting (not thin or sparse). Think award-winning magazine feature, not pleasant-but-generic."
+
+const LIGHTING_CLAUSE =
+  "Lighting, exposure, and time of day match the input photo exactly — bright and naturally lit, no dim or moody cinematic effects. Photorealistic."
+
+const CLOSING_PRESERVATION =
+  "Final reminder: the house and all architecture must stay pixel-perfect and unchanged — only the plants, hardscape surfaces, and landscape lighting may be redesigned."
+
+type StyleVariant = {
+  // Short label for debugging / future analytics on which variants land well.
+  name: string
+  // The creative middle of the prompt — describes aesthetic, hero elements,
+  // and material palette for this specific take on the style.
+  creative: string
+}
+
+const STYLE_VARIANTS: Record<string, StyleVariant[]> = {
+  modern: [
+    {
+      name: "architectural-minimalism",
+      creative:
+        "Redesign the landscape as a restrained contemporary garden with heavy negative space. Hero: three mature sculptural agaves or a single multi-stem olive as the lone focal point. Ground: wide bands of pale river pebble and dark steel edging, large poured-concrete pavers with crisp dark joints. One or two tight evergreen shapes (boxwood sphere or clipped yew), no flowering plants. Everything geometric, nothing filling corners for balance.",
+    },
+    {
+      name: "ornamental-grass-drift",
+      creative:
+        "Redesign the landscape as drifts of mixed ornamental grasses — feather reed grass, blue fescue, Mexican feather grass, little bluestem — flowing in asymmetric bands across the yard. No clipped shrubs, no agaves. Hero: the movement and texture of the grasses themselves. Hardscape: smooth limestone slab path, matte black steel planters, decomposed-granite surround. Light, airy, prairie-adjacent but intentionally designed.",
+    },
+    {
+      name: "monochrome-green-garden",
+      creative:
+        "Redesign the landscape as a densely planted monochromatic green garden. Varied textures of green only (no flowers, no silver foliage): mature Japanese maple as a focal point, hakonechloa grasses in sweeping drifts, hostas in shade areas, mondo grass ground cover, soft ferns against the house. Hardscape: dark basalt stepping stones, charcoal pea-gravel. Lush but restrained.",
+    },
+  ],
+  zen: [
+    {
+      name: "karesansui-dry-garden",
+      creative:
+        "Redesign the landscape as an authentic Japanese karesansui dry garden. Large expanse of finely raked white or pale grey gravel with curved rake patterns. Weathered mossy granite boulders in asymmetric odd-numbered groupings as 'islands.' One sculpted Japanese maple with deep crimson leaves as the hero focal point. Low mounds of emerald moss, meandering stepping-stone path of dark basalt. Minimal plantings. Contemplative, deliberately spare.",
+    },
+    {
+      name: "tea-garden-roji",
+      creative:
+        "Redesign the landscape as a traditional Japanese tea-garden (roji). Winding stepping-stone path through soft moss ground cover, flanking cloud-pruned (niwaki) azalea mounds and pines, bamboo screening along one edge, a stone water basin (tsukubai) with a bamboo spout and small ladle, a single stone lantern. No raked-gravel sea. Enclosed, intimate, procession-based, quieter than a karesansui.",
+    },
+    {
+      name: "modern-japanese",
+      creative:
+        "Redesign the landscape as a modern Japanese-inspired garden — contemporary minimalist, not traditional. Clusters of black bamboo rising against the house, horsetail reeds in a long steel trough, a drift of hakonechloa grass. Ground: large square ipe-wood deck pavers set in black pebbles. No raked gravel, no stone lanterns, no Japanese maples. Architectural, calm, uses Japanese design logic without the obvious vocabulary.",
+    },
+  ],
+  tropical: [
+    {
+      name: "modern-tropical",
+      creative:
+        "Redesign the landscape as a contemporary modern-tropical garden — the resort-architect version of tropical. Hero: three mature architectural traveler's palms or a single clumping giant bird-of-paradise as a dramatic specimen (not symmetric corner palms). Supporting: a sculpted podocarpus hedge for a crisp green wall, structural clumps of golden bamboo, a few mature philodendron selloum with huge sculpted leaves. Hardscape: large pale-concrete pavers set in black river pebble, a horizontal ipe-wood slat screen along one edge, a shallow linear reflecting trough (not a cliché decorative waterfall). Clean lines, mature plants, confident restraint. High-end resort rather than lush jungle.",
+    },
+    {
+      name: "caribbean-courtyard",
+      creative:
+        "Redesign the landscape as a vibrant Caribbean-island courtyard. Hero: a flowering red hibiscus hedge and clusters of red-and-yellow heliconia and ginger plants. Supporting: variegated crotons for color, ti plants with purple-red leaves, bromeliads tucked between stones. One or two small plumeria trees for scent — no coconut palms or bougainvillea. Ground: crushed seashell path, coral-stone wall accents. Saturated, playful, close to the ground.",
+    },
+    {
+      name: "balinese-resort",
+      creative:
+        "Redesign the landscape as a mature Balinese resort garden. Hero: clumps of golden bamboo rising to screen the back of the yard. Supporting: frangipani trees in bloom, dracaena spikes, bird-of-paradise, a cycad or two, dense mondo-grass carpets. One carved-stone statue tucked into greenery as focal point. Hardscape: dark river-stone path with moss between joints. Sophisticated, resort-polished, layered — not cliché beach-vacation.",
+    },
+    {
+      name: "palm-forward",
+      creative:
+        "Redesign the landscape with multiple species of palms as the signature feature (foxtail palms, triangle palms, pygmy date palms — varied heights and textures, not a symmetric pair). Supporting: cascading magenta bougainvillea on a single trellis, hibiscus hedge, orange heliconia clusters. Ground: natural flagstone path. Classic tropical paradise feel but with varied palm species rather than two identical corner palms.",
+    },
+  ],
+  mediterranean: [
+    {
+      name: "tuscan-olive-grove",
+      creative:
+        "Redesign the landscape as a Tuscan olive-grove-inspired garden. Hero: a single mature gnarled-trunk silver olive tree as the focal point. Supporting: long aromatic rows of purple lavender and rosemary, sage and oregano in drifts, small cypress accents (no symmetric cypress sentinels). Hardscape: warm-toned decomposed-granite path, dry-stacked limestone retaining wall, one weathered terracotta urn. Sun-baked, aromatic, horizontal composition.",
+    },
+    {
+      name: "provencal-herb-courtyard",
+      creative:
+        "Redesign the landscape as a Provençal herb-focused courtyard garden. Central pea-gravel patio, surrounded by raised terracotta beds overflowing with culinary herbs: thyme, sage, marjoram, chives, bronze fennel. Climbing white and pink roses on a simple iron trellis against one wall. A pair of standard-trained bay laurels in weathered pots. No olives, no cypresses. Lived-in, aromatic, kitchen-garden energy.",
+    },
+    {
+      name: "greek-island",
+      creative:
+        "Redesign the landscape as a Greek-island hillside garden. Cascading magenta and coral bougainvillea spilling over low whitewashed walls (where the architecture permits), fig trees with silvery bark, clusters of blue-leaved agave and golden barrel cactus, drifts of silver santolina and curry plant. Ground: tumbled white marble chip. Cobalt-blue glazed pots as accents. Hot, bright, white-and-blue palette rather than Tuscan terracotta.",
+    },
+  ],
+  xeriscape: [
+    {
+      name: "sonoran-desert",
+      creative:
+        "Redesign the landscape as a Sonoran desert garden. Hero: a single mature saguaro cactus as the sculptural focal point (not a line of them). Supporting: a palo verde tree with green bark and yellow flowers providing filtered shade, mature blue agaves, clusters of golden barrel cactus, spiny ocotillo with crimson flower tips, red-flowering hesperaloe. Ground: rust-colored decomposed granite with scattered boulders. Zero turf. Water-wise, Arizona-authentic.",
+    },
+    {
+      name: "california-native",
+      creative:
+        "Redesign the landscape as a California native drought-tolerant garden. Hero: mature manzanita with dark red peeling bark as the signature structural plant. Supporting: ceanothus with blue flowers, white sage, California poppy, deer grass tufts, matilija poppy with huge white flowers. Ground: tan decomposed granite, river-rock dry streambed meandering through. No cacti, no agaves. Soft, naturalistic, California-chaparral feel.",
+    },
+    {
+      name: "mediterranean-dryland",
+      creative:
+        "Redesign the landscape as a Mediterranean dryland garden mixing structure and softness. Hero: silver-foliaged plants dominate — artemisia, lamb's ear, Russian sage, Mexican feather grass, Jerusalem sage. One or two agaves and a yucca for sculptural anchor. Lavender and rosemary rows at the path edges. Ground: pale pea gravel with dry-stacked flat-stone edging. No saguaros, no palo verdes. Softer and more layered than a Sonoran garden; still zero turf.",
+    },
+  ],
 }
 
 async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
@@ -118,7 +222,7 @@ export default async function handler(
       .status(413)
       .json({ error: "Image is too large. Please upload under 5 MB." })
   }
-  if (!style || typeof style !== "string" || !STYLE_PROMPTS[style]) {
+  if (!style || typeof style !== "string" || !STYLE_VARIANTS[style]) {
     return res.status(400).json({ error: "Pick a valid style." })
   }
 
@@ -159,13 +263,36 @@ export default async function handler(
 
   // ---- Build prompt ----
   const userExtra = (prompt ?? "").toString().trim().slice(0, 500)
-  const fullPrompt = userExtra
-    ? `${STYLE_PROMPTS[style]} Additional details from the user: ${userExtra}`
-    : STYLE_PROMPTS[style]
+  // Pick one of the style's variants at random so repeat generations surprise
+  // instead of converging on the same template.
+  const variants = STYLE_VARIANTS[style]
+  const variant = variants[Math.floor(Math.random() * variants.length)]
+  // User-provided extras are a priority instruction — slotted RIGHT AFTER
+  // the variant creative so they're read as part of the core brief, and
+  // framed as a requirement that overrides any conflicting default
+  // (e.g., user asks for a water feature even though ANTI_CLICHE elsewhere
+  // discourages decorative water features by default).
+  const userRequirement = userExtra
+    ? `The user has specifically requested the following and this requirement MUST be honored, overriding any conflicting defaults: ${userExtra}.`
+    : ""
+
+  const fullPrompt = [
+    PRESERVATION_CLAUSE,
+    variant.creative,
+    userRequirement,
+    ANTI_CLICHE,
+    WOW_FACTOR,
+    LIGHTING_CLAUSE,
+    CLOSING_PRESERVATION,
+  ]
+    .filter(Boolean)
+    .join(" ")
+  // Logged (server-only) so we can trace which variant produced which image.
+  console.log(`fal generate: style=${style} variant=${variant.name}`)
 
   // Guidance scale is hard-coded to the max (10) — lower values produced
   // weak, conservative redesigns in testing. The sandwiched preservation
-  // clauses in STYLE_PROMPTS hold the house in place at this setting.
+  // clauses in the sandwich hold the house in place at this setting.
   const GUIDANCE_SCALE = 10
 
   // ---- Call fal.ai (FLUX.1 Kontext [pro]) ----
