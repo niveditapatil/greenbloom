@@ -273,7 +273,7 @@ export default async function handler(
   // (e.g., user asks for a water feature even though ANTI_CLICHE elsewhere
   // discourages decorative water features by default).
   const userRequirement = userExtra
-    ? `The user has specifically requested the following and this requirement MUST be honored, overriding any conflicting defaults: ${userExtra}.`
+    ? `The user has specifically requested the following and this requirement MUST be honored, overriding any conflicting defaults: ${userExtra}. Interpret this request generously — if the user names a category (e.g., "water feature", "seating area", "lighting"), render it as a substantial, well-integrated hero element in the composition (e.g., a cascading natural-stone waterfall or a modern linear reflecting pool for "water feature") — not a small token version (e.g., a pot with water, a bird bath) tucked in a corner.`
     : ""
 
   const fullPrompt = [

@@ -381,12 +381,13 @@ export function Greenbloom() {
                       id="prompt"
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value.slice(0, 500))}
-                      placeholder="e.g., include a small fire pit, keep the existing tree, add pollinator-friendly flowers"
+                      placeholder="e.g., add a cascading stone waterfall, include an outdoor dining area with pergola, use drought-tolerant plants only"
                       className="mt-2 bg-gray-700 border-gray-600 text-gray-100"
                       rows={3}
                     />
                     <p className="text-xs text-gray-500 mt-1">
-                      {prompt.length}/500
+                      Tip: be specific. &ldquo;cascading stone waterfall&rdquo; works
+                      much better than &ldquo;water feature&rdquo;. {prompt.length}/500
                     </p>
                   </div>
 
