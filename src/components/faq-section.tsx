@@ -13,11 +13,11 @@ const FAQS = [
   },
   {
     q: "Are my photos stored anywhere?",
-    a: "Your upload is sent to fal.ai to generate the redesign, then discarded. Greenbloom doesn't save your original or the result on any server. The browser holds them in memory while you're using the app, and clears them when you reload.",
+    a: "Your upload is sent to our AI provider to generate the redesign, then discarded. Greenbloom doesn't save your original or the result on any server. The browser holds them in memory while you're using the app, and clears them when you reload.",
   },
   {
     q: "Can I use the generated images commercially?",
-    a: "Yes, per fal.ai's terms. Greenbloom is a hobby project though — not legal advice. If you're planning to use results in a client deliverable, double-check the fal.ai output license at the time you generate.",
+    a: "Generally yes, but Greenbloom isn't legal advice. The generated images are subject to the underlying AI provider's output license. If you're planning to use results in a paid client deliverable or publication, double-check the provider's terms at the time you generate.",
   },
   {
     q: "Why does the same yard look different each time I generate?",

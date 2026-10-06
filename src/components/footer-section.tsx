@@ -35,27 +35,6 @@ export function FooterSection() {
             <Github className="h-4 w-4" />
             GitHub
           </a>
-          <span className="text-gray-700">·</span>
-          <span>
-            Powered by{" "}
-            <a
-              href="https://fal.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-emerald-400 transition-colors"
-            >
-              fal.ai
-            </a>
-            {" · "}
-            <a
-              href="https://vercel.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-emerald-400 transition-colors"
-            >
-              Vercel
-            </a>
-          </span>
         </div>
       </div>
     </footer>

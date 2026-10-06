@@ -59,30 +59,6 @@ export default function AboutUsPage() {
       </div>
 
       {/* -------------------------------------------------- */}
-      {/*  Technology                                         */}
-      {/* -------------------------------------------------- */}
-      <h2 className="text-2xl font-bold text-white mb-4">Under the hood</h2>
-      <p className="text-gray-400 leading-relaxed mb-6">
-        Image generation uses a state-of-the-art AI image-editing model
-        served via{" "}
-        <a
-          href="https://fal.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-emerald-400 hover:text-emerald-300 underline underline-offset-4"
-        >
-          fal.ai
-        </a>
-        , chosen after side-by-side testing of several leading options for its
-        noticeably better instruction-following on landscape edits. The web
-        app is Next.js on
-        Vercel. Rate limiting runs on Upstash Redis — a per-IP cap plus a
-        site-wide daily ceiling that keeps worst-case AI spend bounded.
-        Cloudflare Turnstile gates the generate action against bots. Full
-        source and architecture notes are on GitHub.
-      </p>
-
-      {/* -------------------------------------------------- */}
       {/*  Who built it                                       */}
       {/* -------------------------------------------------- */}
       <h2 className="text-2xl font-bold text-white mb-4 mt-10">
