@@ -63,7 +63,8 @@ export default function AboutUsPage() {
       {/* -------------------------------------------------- */}
       <h2 className="text-2xl font-bold text-white mb-4">Under the hood</h2>
       <p className="text-gray-400 leading-relaxed mb-6">
-        Image generation uses FLUX.1 Kontext [pro] via{" "}
+        Image generation uses a state-of-the-art AI image-editing model
+        served via{" "}
         <a
           href="https://fal.ai"
           target="_blank"
@@ -72,9 +73,9 @@ export default function AboutUsPage() {
         >
           fal.ai
         </a>
-        , chosen for its ability to preserve structural elements of the input
-        photo (the house, driveway, property lines) while completely
-        re-imagining the surrounding landscape. The web app is Next.js on
+        , chosen after side-by-side testing of several leading options for its
+        noticeably better instruction-following on landscape edits. The web
+        app is Next.js on
         Vercel. Rate limiting runs on Upstash Redis — a per-IP cap plus a
         site-wide daily ceiling that keeps worst-case AI spend bounded.
         Cloudflare Turnstile gates the generate action against bots. Full

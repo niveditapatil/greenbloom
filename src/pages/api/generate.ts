@@ -42,7 +42,13 @@ const MODEL_ENDPOINTS: Record<string, string> = {
   flux2: "fal-ai/flux-2-pro/edit",
   "nano-banana": "fal-ai/nano-banana-2/edit",
 }
-const DEFAULT_MODEL = "flux2"
+// Picked after side-by-side comparison testing. Nano Banana 2 (Gemini 2.5
+// Flash Image Edit) handled user instructions dramatically better than
+// FLUX.2 Pro Edit on landscape prompts — specifically, requests like "add
+// a cascading stone waterfall" showed up as actual waterfalls instead of
+// being substituted with token elements like a pot of water. Keeping the
+// dispatch table above so swapping models later is a one-line change.
+const DEFAULT_MODEL = "nano-banana"
 
 // Prompt structure ("sandwich" with randomized middle):
 //   1. PRESERVATION_CLAUSE — architectural specifics that must stay pixel-
@@ -218,7 +224,7 @@ export default async function handler(
   const { imageDataUrl, style, prompt, turnstileToken, model } =
     (req.body ?? {}) as GenerateBody
 
-  // Resolve + validate model choice. Default to FLUX.2 when unspecified.
+  // Resolve + validate model choice. Default to Nano Banana 2 when unspecified.
   const modelName = typeof model === "string" && model in MODEL_ENDPOINTS
     ? model
     : DEFAULT_MODEL

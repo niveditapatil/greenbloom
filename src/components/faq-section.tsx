@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react"
 const FAQS = [
   {
     q: "Will the AI change my actual house?",
-    a: "No — Greenbloom only modifies the landscaping (plants, lawn, pathways, planters) in the generated image. Your real house is never touched. The underlying FLUX.1 Kontext model occasionally introduces minor visual variations in the rendered image, but it has no connection to your home.",
+    a: "No — Greenbloom only modifies the landscaping (plants, lawn, pathways, planters) in the generated image. Your real house is never touched. The underlying AI model occasionally introduces minor visual variations in the rendered image, but it has no connection to your home.",
   },
   {
     q: "Is this really free?",
@@ -14,10 +14,6 @@ const FAQS = [
   {
     q: "Are my photos stored anywhere?",
     a: "Your upload is sent to fal.ai to generate the redesign, then discarded. Greenbloom doesn't save your original or the result on any server. The browser holds them in memory while you're using the app, and clears them when you reload.",
-  },
-  {
-    q: "What AI model powers this?",
-    a: "FLUX.1 Kontext [pro] from Black Forest Labs, served via fal.ai. It's a state-of-the-art image-to-image model that preserves the structure of your photo while re-imagining the parts the prompt describes.",
   },
   {
     q: "Can I use the generated images commercially?",

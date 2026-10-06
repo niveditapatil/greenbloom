@@ -14,7 +14,7 @@ Greenbloom is building the shortest path from a homeowner's yard photo to a buil
 
 1. **Upload** a photo of your front or back yard. Any phone photo works — the client auto-resizes to 1920 px wide before sending.
 2. **Pick a style** from five landscape archetypes (Modern, Japanese Zen, Tropical, Mediterranean, Xeriscape / Desert) and optionally add a free-text nudge (e.g., "include a fire pit").
-3. **Get a redesign** rendered by FLUX.1 Kontext in roughly 15 seconds — the house, driveway, and property lines stay pixel-faithful to your photo; only the plants, hardscape, and landscape lighting change.
+3. **Get a redesign** rendered by an AI image-editing model in roughly 15 seconds — the house, driveway, and property lines stay pixel-faithful to your photo; only the plants, hardscape, and landscape lighting change.
 
 Keep clicking "Try another style" to flip through redesigns on the same photo without re-uploading.
 
@@ -26,7 +26,7 @@ Keep clicking "Try another style" to flip through redesigns on the same photo wi
 | Language | TypeScript |
 | Styling | Tailwind CSS + shadcn/ui |
 | Animation | Framer Motion |
-| Image model | FLUX.1 Kontext [pro] via [fal.ai](https://fal.ai) |
+| Image model | Nano Banana 2 (Gemini 2.5 Flash Image Edit) via [fal.ai](https://fal.ai) |
 | Rate limiting | Upstash Redis + `@upstash/ratelimit` (sliding window) |
 | Bot protection | Cloudflare Turnstile |
 | Hosting | Vercel |
@@ -39,15 +39,15 @@ Keep clicking "Try another style" to flip through redesigns on the same photo wi
 
 - **Cloudflare Turnstile** blocks scripted clients before they can hit the model.
 - **Per-IP rate limit** (5 generations / hour) protects against a single attacker grinding through credits.
-- **Site-wide global limit** (100 generations / day) is the last line of defense against distributed botnets — it caps worst-case daily fal spend below $4 (100 × $0.04 per image).
+- **Site-wide global limit** (100 generations / day) is the last line of defense against distributed botnets — it caps worst-case daily fal spend below $6 (100 × $0.06 per image).
 
 Rate limiting auto-disables in development (`NODE_ENV !== "production"`) so local iteration isn't throttled.
 
-**Prompt engineering for image-to-image fidelity.** FLUX.1 Kontext is powerful but happily redesigns the house along with the landscape at high guidance. Each style prompt is structured as a **sandwich**: a strong architectural preservation clause (listing windows, siding, paint, roof, trim, doors, etc.) wraps both the opening *and* closing of the prompt, so the model gets the "don't touch the house" signal in both high-weight positions. The creative hero description — concrete species and materials — lives in the middle.
+**Prompt engineering for image-to-image fidelity.** Image-edit models at high prompt adherence happily redesign the house along with the landscape unless explicitly held back. Each style prompt is structured as a **sandwich**: a strong architectural preservation clause (listing windows, siding, paint, roof, trim, doors, etc.) wraps both the opening *and* closing of the prompt, so the model gets the "don't touch the house" signal in both high-weight positions. The creative hero description, user-requested elements, and anti-cliché guardrails live in the middle. Model selection went through side-by-side testing — FLUX.1 Kontext, FLUX.2 Pro, and Nano Banana 2 all generated against the same prompt sandwich; Nano Banana 2 won on instruction-following (e.g., actually renders a cascading waterfall when asked, rather than substituting a bird bath).
 
 **Client-side image resize.** The browser decodes the uploaded file into a canvas, scales it so the longest side is ≤ 1920 px, and re-encodes as JPEG at quality 0.85 before sending. This handles multi-MB phone photos cleanly, keeps the eventual payload well under Vercel's 4.5 MB serverless body cap, and strips EXIF (including GPS) as a privacy side-benefit.
 
-**Honest UX over knobs.** An early version exposed a "How dramatic?" guidance slider. Testing showed users always pushed it to max, so the knob was removed and the backend now hardcodes guidance to the maximum, leaning on prompt structure (not parameters) to keep the house in place.
+**Honest UX over knobs.** An early version exposed a "How dramatic?" guidance slider. Testing showed users always pushed it to max, so the knob was removed and the backend leans on prompt structure (not parameters) to shape output.
 
 **Match-input lighting.** Earlier outputs defaulted to golden-hour cinematic lighting, which looked great in isolation but broke tonal consistency with midday upload photos. Prompts now explicitly ask the model to match the input photo's lighting, exposure, and time of day — cleaner before/after comparisons at the cost of some drama.
 

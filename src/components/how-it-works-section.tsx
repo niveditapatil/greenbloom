@@ -19,7 +19,7 @@ const STEPS = [
     icon: Sparkles,
     number: "03",
     title: "See it transformed",
-    body: "FLUX.1 Kontext redesigns the landscape in ~15 seconds. Your house, driveway, and property lines stay faithful to the photo.",
+    body: "AI redesigns the landscape in roughly 15 seconds. Your house, driveway, and property lines stay faithful to the photo.",
   },
 ]
 
