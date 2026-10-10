@@ -20,7 +20,6 @@ import { FaqSection } from "@/components/faq-section"
 import { GallerySection } from "@/components/gallery-section"
 import { HeroSection } from "@/components/hero-section"
 import { HowItWorksSection } from "@/components/how-it-works-section"
-import { RoadmapSection } from "@/components/roadmap-section"
 
 /* ------------------------------------------------------------------ */
 /*  Style catalog                                                      */
@@ -554,12 +553,6 @@ export function Greenbloom() {
       {/* ---------------------------------------------------- */}
       <FaqSection />
 
-      {/* ---------------------------------------------------- */}
-      {/*  Roadmap of coming-soon features                       */}
-      {/* ---------------------------------------------------- */}
-      <div className="max-w-4xl mx-auto px-4 pb-16">
-        <RoadmapSection />
-      </div>
     </div>
   )
 }
